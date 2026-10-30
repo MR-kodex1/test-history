@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1459a8">
+  <title>قرطبة | تاريخ تفاعلي</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="قرطبة، الرئيسية">
+      <span class="brand-mark">ق</span>
+      <span><strong>قرطبة</strong><small>التاريخ بطريقة تحكي</small></span>
+    </a>
+    <nav aria-label="التنقل الرئيسي">
+      <a href="#lesson">الشرح</a>
+      <a href="#quiz">اختبر نفسك</a>
+      <a href="#about">عن المدرس</a>
+    </nav>
+    <a class="nav-cta" href="#lesson">ابدأ التعلّم <span>←</span></a>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> التاريخ مش تواريخ وخلاص</div>
+        <h1>افهم الحكاية،<br><em>وعيش تفاصيلها.</em></h1>
+        <p>رحلة تاريخية تفاعلية، شخصيات تحكي لك الأحداث، وأسئلة تثبّت المعلومة خطوة بخطوة.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#lesson">ابدأ أول درس <span>←</span></a>
+          <a class="text-link" href="#characters">قابل شخصيات الرحلة <span>↓</span></a>
+        </div>
+        <div class="hero-note"><span class="note-icon">✦</span> شرح بسيط · تفاعل · مراجعة سريعة</div>
+      </div>
+      <div class="hero-art" aria-label="شخصية مرشد تاريخي كرتونية">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <span class="spark spark-a">✦</span><span class="spark spark-b">✧</span>
+        <div class="date-chip"><span>رحلتنا تبدأ</span><strong>من هنا</strong></div>
+        <div class="guide-figure"><div class="guide-halo"></div><div class="guide-face"><span class="hair"></span><span class="eye eye-one"></span><span class="eye eye-two"></span><span class="smile"></span></div><div class="guide-body"><span class="collar"></span><span class="badge">ق</span></div></div>
+        <div class="speech-card"><span class="speech-icon">✦</span><span><strong>الدليل</strong><small>جاهز تحكيلي؟</small></span><span class="wave">〰</span></div>
+        <span class="art-label">حكاية ورا حكاية</span>
+      </div>
+    </section>
+
+    <section class="intro section-wrap" id="characters">
+      <div class="section-heading">
+        <div><span class="eyebrow">رفاق الرحلة</span><h2>كل حدث له <em>صوت</em></h2></div>
+        <p>شخصيات خيالية تساعدك تتخيل الزمن وتفهم الأحداث. هنختارها ونبنيها مع محتوى دروسك.</p>
+      </div>
+      <div class="character-grid">
+        <article class="character-card narrator"><div class="avatar avatar-narrator"><span>📜</span></div><div><span class="role-tag">الدليل</span><h3>راوي</h3><p>يرتب لك الأحداث ويحكيها ببساطة.</p></div><span class="card-arrow">↙</span></article>
+        <article class="character-card explorer"><div class="avatar avatar-explorer"><span>🧭</span></div><div><span class="role-tag">المستكشف</span><h3>ليلى</h3><p>تسأل أسئلة تخليك تلاحظ التفاصيل.</p></div><span class="card-arrow">↙</span></article>
+        <article class="character-card historian"><div class="avatar avatar-historian"><span>🏺</span></div><div><span class="role-tag">صديق الآثار</span><h3>أثَر</h3><p>يربط الحكاية بالأماكن والآثار.</p></div><span class="card-arrow">↙</span></article>
+      </div>
+    </section>
+
+    <section class="lesson-section" id="lesson">
+      <div class="section-wrap lesson-layout">
+        <div class="lesson-copy"><span class="eyebrow light-eyebrow">شكل الدرس التفاعلي</span><h2>مشاهدة بس؟<br><em>لأ، إنت جوه الحكاية.</em></h2><p>الشخصية تشرح، وإنت تختار تكمل إزاي. في النسخة دي مثال توضيحي؛ هنستبدله بشرح وأسئلة ملف الوورد بتاعك.</p><div class="lesson-progress"><span>رحلة الدرس</span><div class="progress-track"><i></i></div><b>1 / 3</b></div></div>
+        <div class="lesson-demo">
+          <div class="demo-top"><span class="chapter-pill"><i></i> مقدمة الدرس</span><span class="more-dots">•••</span></div>
+          <div class="dialogue"><div class="mini-avatar">📜</div><div class="bubble"><span class="speaker">راوي · دليلك</span><p>أهلًا بيك! قبل ما نبدأ، تحب تعرف إيه الأول؟</p></div></div>
+          <div class="choice-list" id="lessonChoices">
+            <button class="choice" data-answer="المكان">فين هتبدأ الحكاية؟ <span>←</span></button>
+            <button class="choice" data-answer="الزمن">إمتى حصلت الأحداث؟ <span>←</span></button>
+            <button class="choice" data-answer="الشخصيات">مين أبطال الحكاية؟ <span>←</span></button>
+          </div>
+          <div class="demo-response" id="demoResponse" aria-live="polite">اختار سؤالًا عشان نكمل الرحلة.</div>
+          <div class="demo-foot"><span>✦ كل اختيار يفتح لك بابًا جديدًا</span><span class="step-count">● ○ ○</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quiz-section section-wrap" id="quiz">
+      <div class="section-heading"><div><span class="eyebrow">دورك دلوقتي</span><h2>سؤال سريع <em>للمراجعة</em></h2></div><span class="quiz-counter" id="quizCounter">سؤال ١ من ٣</span></div>
+      <div class="quiz-card">
+        <div class="quiz-mark">؟</div><div class="quiz-content"><span class="question-label">اختبر فهمك</span><h3 id="questionText">إيه أكتر حاجة بتساعدنا نفهم حدث تاريخي؟</h3><div class="answer-grid" id="answerGrid"></div><p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p><button id="nextQuestion" class="button primary next-button" hidden>السؤال التالي <span>←</span></button></div>
+      </div>
+    </section>
+
+    <section class="teacher" id="about"><div class="teacher-inner"><div class="teacher-symbol">ق</div><div><span class="eyebrow light-eyebrow">معاك في كل خطوة</span><h2>محمد لطفي <span>«قرطبة»</span></h2><p>مدرس التاريخ · شرح يحوّل المعلومة لحكاية</p></div><div class="teacher-decoration">✦</div></div></section>
+  </main>
+
+  <footer><a class="brand footer-brand" href="#home"><span class="brand-mark">ق</span><strong>قرطبة</strong></a><span>التاريخ أقرب لما نفهم حكايته.</span><a href="#home" class="back-top">فوق ↑</a></footer>
+</body>
+</html>
