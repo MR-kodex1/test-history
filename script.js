@@ -1,73 +1,273 @@
-const lessonReplies = {
-  'المكان': 'هنحدد المكان على خريطة الرحلة، وبعدها نشوف إزاي أثّر في الأحداث.',
-  'الزمن': 'هنرتب الأحداث على خط زمني عشان نعرف إيه اللي حصل الأول وإيه اللي جه بعده.',
-  'الشخصيات': 'هنقابل الشخصيات المؤثرة ونعرف دور كل واحدة في الحكاية.'
-};
-document.querySelectorAll('.choice').forEach(button => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('.choice').forEach(item => item.classList.remove('selected'));
-    button.classList.add('selected');
-    document.getElementById('demoResponse').textContent = lessonReplies[button.dataset.answer];
+const chapters = [
+  {
+    title: 'يعني إيه دولة؟', speaker: 'راوي · دليلك', icon: '📜',
+    paragraphs: [
+      'الدولة كيان سياسي منظم يعيش فيه شعب على مساحة جغرافية محددة. ينظم هذا الكيان شؤون الناس عن طريق مؤسسات وسلطة تطبّق القوانين وتحافظ على الأمن والاستقرار.',
+      'وجود أرض أو سكان وحده لا يكفي لقيام الدولة. لا بد من سلطة تدير الشؤون الداخلية والخارجية، ومن سيادة تمكّن الدولة من اتخاذ قراراتها. لذلك ترتبط أركان الدولة بعضها ببعض؛ فإذا ضعف ركن تأثرت قدرة الدولة على أداء وظائفها.'
+    ],
+    points: ['الشعب: الناس الذين ينتمون إلى الدولة ويعيشون فيها.', 'الحيز الجغرافي: المساحة التي تمارس الدولة سيادتها عليها.', 'السلطة: المؤسسات التي تدير شؤون الدولة وتنفذ القوانين.', 'السيادة: استقلال الدولة في قراراتها الداخلية والخارجية.'],
+    callout: 'فكّر فيها كبيت كبير: الناس هم أهله، والأرض هي مكانه، والمؤسسات تنظّم العيش فيه، والسيادة تعني أن قراره بيده.',
+    prompt: 'لو وُجد شعب يعيش على أرض محددة، لكن لا توجد سلطة تنظّم شؤونه، ما الركن الذي ينقصه؟', options: ['السلطة المنظمة', 'الموارد الطبيعية', 'اللغة المشتركة'], correct: 0,
+    reflection: 'السلطة تنظم شؤون الدولة وتطبّق القوانين. الموارد واللغة قد تدعمان المجتمع، لكنهما لا تحلان محل أحد أركان الدولة.'
+  },
+  {
+    title: 'الشعب: من السكان إلى المشاركة', speaker: 'ليلى · المستكشفة', icon: '🧭',
+    paragraphs: [
+      'الشعب هو مجموع المواطنين الذين ينتمون إلى الدولة. وهو ليس مجرد عدد من السكان؛ فهو مصدر السلطات، ويمارس دوره بالمشاركة في الحياة السياسية والاجتماعية والاقتصادية، كما يسهم في حماية الدولة وتنميتها.',
+      'تظهر المشاركة السياسية في اختيار الحكام وممثلي الشعب عبر الانتخابات ومتابعة أداء الحكومة من خلال ممثليهم. وتظهر المشاركة الاقتصادية في العمل والإنتاج ودفع الضرائب التي تموّل الخدمات والمشروعات العامة.',
+      'وتوضح ثورة ١٩١٩ دور الشعب في التغيير: شاركت فئات المجتمع المختلفة في مقاومة الاحتلال البريطاني، وأسهم هذا الحراك في تعزيز الوعي الوطني ووحدة المصريين حول هدف الاستقلال.'
+    ],
+    points: ['المشاركة السياسية: اختيار الممثلين ومراقبة أداء الحكومة.', 'المشاركة الاقتصادية: العمل والإنتاج والمساهمة في تمويل المشروعات العامة.', 'المشاركة المجتمعية: حماية التراث والتماسك ومساندة الوطن وقت الأزمات.'],
+    callout: 'في ثورة ١٩١٩ لم يكن الشعب متفرجًا؛ تحركت فئاته المختلفة، فصار قوة ضغط ساعدت على تغيير الأوضاع السياسية.',
+    prompt: 'أي مثال يبيّن أن دور الشعب يتجاوز وجوده العددي؟', options: ['المشاركة في الانتخابات والعمل والإنتاج', 'وجود حدود طبيعية للدولة', 'سنّ المحاكم للأحكام'], correct: 0,
+    reflection: 'المشاركة السياسية والاقتصادية والاجتماعية تجعل الشعب شريكًا في بناء الدولة وتنميتها وحمايتها.'
+  },
+  {
+    title: 'الحيز الجغرافي: أرض ومياه وسماء', speaker: 'أثَر · صديق المكان', icon: '🏺',
+    paragraphs: [
+      'الحيز الجغرافي هو الرقعة التي تعترف بها الدول الأخرى وتمارس الدولة سيادتها عليها. ويشمل اليابس الذي يعيش عليه السكان، والمياه الإقليمية، والمجال الجوي الذي يعلو اليابس والمياه.',
+      'تُقاس المياه الإقليمية عادةً بمسافة تصل إلى ١٢ ميلًا بحريًا من خط الأساس الساحلي. أما المجال الجوي فهو الفضاء فوق أرض الدولة ومياهها الإقليمية، وتُنظم الدولة حركة الطيران فيه.',
+      'لمصر حدود سياسية برية وبحرية. يذكر الدرس خط عرض ٢٢ درجة جنوبًا حدًا جنوبيًا رُسم عام ١٨٩٩، وخط طول ٢٥ درجة شرقًا حدًا غربيًا مع ليبيا رُسم عام ١٩٢٥. وعلى الشمال يمتد ساحل البحر المتوسط، وشرقًا ساحل البحر الأحمر وخليج العقبة.'
+    ],
+    points: ['اليابس: الأرض التي تقوم عليها الدولة.', 'المياه الإقليمية: نطاق بحري تمارس الدولة سيادتها عليه.', 'المجال الجوي: الفضاء الذي يعلو اليابس والمياه الإقليمية.'],
+    callout: 'لذلك لا يُسمح لطائرة بدخول المجال الجوي المصري دون تصريح، ولا لسفينة بدخول مياهه الإقليمية دون اتباع القواعد المصرية.',
+    prompt: 'طائرة أجنبية تريد عبور سماء مصر. أي ركن يفسر حق مصر في تنظيم ذلك؟', options: ['الحيز الجغرافي والسيادة عليه', 'التجانس الثقافي', 'السلطة القضائية فقط'], correct: 0,
+    reflection: 'المجال الجوي جزء من الحيز الجغرافي، والسيادة تخوّل الدولة تنظيم الدخول إليه.'
+  },
+  {
+    title: 'السلطة: مؤسسات وأدوار', speaker: 'راوي · دليلك', icon: '📜',
+    paragraphs: [
+      'السلطة هي المؤسسات الحاكمة التي تدير شؤون الدولة الداخلية والخارجية، وتضع القوانين وتنظم تنفيذها، وتحافظ على الأمن العام. وفي مصر تتوزع الاختصاصات بين سلطات تشريعية وتنفيذية وقضائية.',
+      'مجلس النواب هو المؤسسة التشريعية؛ يسن القوانين، ويقر السياسة العامة والخطة والموازنة، ويمارس الرقابة على أعمال السلطة التنفيذية. والسلطة التنفيذية، التي تضم رئيس الجمهورية والحكومة، تدير شؤون الدولة وتنفذ القوانين والسياسات.',
+      'أما السلطة القضائية فتفصل في القضايا المختلفة وتصدر أحكامها وفقًا للقانون. هذا التوزيع يوضح أن لكل سلطة اختصاصًا، وأن تنظيم العلاقة بينها يساعد على سيادة القانون والاستقرار وحماية حقوق المواطنين.'
+    ],
+    points: ['التشريعية: سنّ القوانين وإقرار الخطة والموازنة والرقابة.', 'التنفيذية: إدارة شؤون الدولة وتنفيذ القوانين والسياسات.', 'القضائية: الفصل في القضايا وإصدار الأحكام وفق القانون.'],
+    callout: 'مثال سريع: البرلمان يسن القانون، الحكومة تعمل على تنفيذه، والمحاكم تفصل في النزاع إذا اختلف الناس حول تطبيقه.',
+    prompt: 'جهة تفصل في نزاع بين مواطنين وتصدر حكمًا وفق القانون. ما نوع السلطة؟', options: ['التشريعية', 'التنفيذية', 'القضائية'], correct: 2,
+    reflection: 'الفصل في القضايا وإصدار الأحكام من اختصاص السلطة القضائية.'
+  },
+  {
+    title: 'السيادة: القرار من داخل الدولة وخارجها', speaker: 'ليلى · المستكشفة', icon: '🧭',
+    paragraphs: [
+      'السيادة هي استقلال الدولة في اتخاذ قراراتها المتعلقة بشؤونها الداخلية والخارجية دون الخضوع لسلطة أجنبية. وهي ركن أساسي؛ فالدولة التي لا تملك قرارها لا تستطيع إدارة مصالح شعبها أو حماية حدودها كما ينبغي.',
+      'السيادة الداخلية تعني حرية الدولة في سن القوانين، وحفظ الأمن، وإدارة شؤون المواطنين، وتطبيق النظام داخل حدودها. ومن أمثلتها تنظيم دخول الطائرات إلى المجال الجوي أو حماية قناة السويس ومراقبة سلامة الملاحة فيها.',
+      'أما السيادة الخارجية فتعني استقلال الدولة في علاقاتها الدولية؛ مثل إبرام المعاهدات، وإقامة العلاقات الدبلوماسية، وحماية المصالح الوطنية، وتمثيل الدولة في المنظمات الدولية.'
+    ],
+    points: ['داخلية: قوانين وأمن وإدارة شؤون المواطنين.', 'خارجية: علاقات دولية ومعاهدات وتمثيل وحماية المصالح الوطنية.', 'السلطة المنظمة والسيادة تدعمان الأمن والاستقرار وممارسة الدولة لاختصاصاتها.'],
+    callout: 'تمييز سريع: تطبيق القانون داخل مصر سيادة داخلية؛ اختيار موقف مصر في علاقة دولية سيادة خارجية.',
+    prompt: 'إبرام مصر معاهدة مع دولة أخرى مثال على أي نوع من السيادة؟', options: ['السيادة الداخلية', 'السيادة الخارجية', 'الحيز الجغرافي'], correct: 1,
+    reflection: 'المعاهدات والعلاقات مع الدول تدخل ضمن السيادة الخارجية.'
+  },
+  {
+    title: 'الموقع والحدود الطبيعية', speaker: 'أثَر · صديق المكان', icon: '🏺',
+    paragraphs: [
+      'تقع مصر في قلب قارات العالم القديم، عند ملتقى أفريقيا وآسيا وأوروبا. منحها هذا الموقع فرصة للتواصل الحضاري والتبادل التجاري بين الشعوب، فكان عاملًا مهمًا في قيامها واستمرارها.',
+      'والحدود الطبيعية مثل الصحارى والبحار ساعدت على حماية قلب الدولة، ولا سيما وادي النيل والدلتا. كما وفر الموقع مجالًا للتبادل والتواصل بدل أن تكون مصر معزولة؛ فوصفها الدرس بأنها دولة «برزخ» تصل بين مناطق وقارات.',
+      'ساعد الموقع الجغرافي أيضًا على استقرار المجتمع المصري عبر التاريخ، إذ أتاح التركيز على الزراعة والعمران وتنظيم شؤون الحياة حول النيل، ودعم نشأة الدولة وترسيخ مؤسساتها.'
+    ],
+    points: ['مصر ملتقى قارات أفريقيا وآسيا وأوروبا.', 'الموقع دعم التواصل الحضاري والتبادل التجاري.', 'الحدود الطبيعية ساعدت على حماية قلب الدولة واستقرارها.'],
+    callout: 'الموقع ليس مجرد مكان على الخريطة: فهو يؤثر في الاتصال والتجارة والحماية وطريقة استقرار السكان.',
+    prompt: 'ما الأثر الذي يفسر وصف مصر بأنها ملتقى للقارات؟', options: ['ساعد موقعها على التواصل الحضاري والتجاري', 'جعلها معزولة عن الشعوب', 'ألغى الحاجة إلى موارد طبيعية'], correct: 0,
+    reflection: 'موقع مصر عند ملتقى القارات جعلها مركزًا للتواصل والتبادل بين الشعوب.'
+  },
+  {
+    title: 'النيل والموارد: أساس الاستقرار', speaker: 'أثَر · صديق المكان', icon: '🏺',
+    paragraphs: [
+      'كان نهر النيل أهم مورد طبيعي في مصر، ومصدرًا للمياه التي اعتمدت عليها الزراعة والحياة. وعلى امتداد التاريخ ساعد النيل على استقرار السكان، وربط الشمال بالجنوب، وأسهم في قيام الحضارة المصرية.',
+      'تحول المصريون من جمع الثمار إلى الزراعة المستقرة، لكن الزراعة احتاجت إلى تنظيم الري وبناء السدود وتوزيع المياه. كما تطلبت حل النزاعات بين الأقاليم؛ لذلك برزت الحاجة إلى سلطة مركزية قوية تنظم العمل الجماعي.',
+      'وإلى جانب النيل، تمتلك مصر أراضي خصبة ومعادن وأحجار بناء وموارد أخرى. ساعدت هذه الموارد على تنشيط الزراعة والصناعة والتجارة، ووفرت مقومات اقتصادية دعمت ازدهار المجتمع واستمرار الدولة.'
+    ],
+    points: ['النيل: مياه وزراعة واتصال بين الشمال والجنوب.', 'تنظيم الري وتوزيع المياه يحتاج إلى تعاون ومؤسسات.', 'الأراضي الخصبة والمعادن وأحجار البناء تدعم الإنتاج والعمران.'],
+    callout: 'سلسلة السبب والنتيجة: النيل يدعم الزراعة؛ الزراعة تحتاج تنظيمًا للري؛ التنظيم يحتاج سلطة قادرة على تنسيق الجهود.',
+    prompt: 'لماذا ساعد النيل على ظهور سلطة مركزية قوية؟', options: ['الحاجة إلى تنظيم الري وتوزيع المياه وحل النزاعات', 'لأن النيل منع الناس من الزراعة', 'لأن الموارد لم تكن موجودة'], correct: 0,
+    reflection: 'إدارة المياه والري والعمل الجماعي بين الأقاليم احتاجت إلى سلطة تنظّم وتنسّق.'
+  },
+  {
+    title: 'العوامل البشرية والهوية الوطنية', speaker: 'ليلى · المستكشفة', icon: '🧭',
+    paragraphs: [
+      'تقوم الدولة وتستمر بتفاعل عوامل بشرية إلى جانب الموقع والنهر. فالتجانس البشري والثقافي بين المصريين ساعد على تكوين مجتمع مترابط، وعلى جعل الوحدة السياسية أمرًا طبيعيًا، رغم اختلاف العصور والحكام.',
+      'وكان توحيد القطرين على يد الملك مينا (نعرمر) أساسًا لقيام حكومة مركزية قوية؛ فتحولت تجمعات صغيرة إلى دولة ذات سلطة واحدة ونظام إداري موحد. كما أسهمت القوة العسكرية في حماية الحدود والدفاع عن البلاد وصون إنجازاتها.',
+      'وحافظ المصريون على هويتهم الوطنية عبر اللغة والثقافة والتراث. تعاقبت لغات ومراحل تاريخية: المصرية القديمة، ثم القبطية في فترة الحكم الروماني وانتشار المسيحية، ثم انتشرت العربية بعد الفتح الإسلامي واستمرت لغة المجتمع. ويُعد الحفاظ على التراث والاحتفال بالمناسبات ودعم الثقافة والفنون من وسائل حماية الهوية.'
+    ],
+    points: ['التجانس والثقافة المشتركة يدعمان الوحدة الوطنية.', 'الحكومة المركزية تنظّم الدولة وتوحّد إدارتها.', 'القوة العسكرية تحمي الحدود، واللغة والتراث يحافظان على الهوية.'],
+    callout: 'استمرار الدولة ليس عاملًا واحدًا؛ الموقع والنيل والموارد والمؤسسات والجيش ووحدة المجتمع والهوية تتساند عبر الزمن.',
+    prompt: 'أي مجموعة تضم عوامل بشرية ساعدت على قيام الدولة واستمرارها؟', options: ['التجانس البشري والحكومة المركزية والقوة العسكرية', 'المياه الإقليمية والمجال الجوي فقط', 'الموقع الجغرافي وحده'], correct: 0,
+    reflection: 'هذه مقومات بشرية؛ أما الموقع والحدود والنيل والموارد الطبيعية فتُعد مقومات طبيعية.'
+  }
+];
+
+let chapterIndex = 0;
+const chapterNav = document.getElementById('chapterNav');
+const chapterTitle = document.getElementById('chapterTitle');
+const chapterText = document.getElementById('chapterText');
+const chapterCallout = document.getElementById('chapterCallout');
+const reflectionPrompt = document.getElementById('reflectionPrompt');
+const reflectionOptions = document.getElementById('reflectionOptions');
+const reflectionFeedback = document.getElementById('reflectionFeedback');
+
+function renderChapter() {
+  const chapter = chapters[chapterIndex];
+  document.getElementById('chapterSpeaker').textContent = chapter.speaker;
+  document.getElementById('chapterAvatar').textContent = chapter.icon;
+  document.getElementById('chapterIndex').textContent = `المحور ${['١','٢','٣','٤','٥','٦','٧','٨'][chapterIndex]}`;
+  chapterTitle.textContent = chapter.title;
+  chapterText.replaceChildren();
+  chapter.paragraphs.forEach(text => {
+    const paragraph = document.createElement('p');
+    paragraph.textContent = text;
+    chapterText.append(paragraph);
   });
+  const list = document.createElement('ul');
+  chapter.points.forEach(text => {
+    const item = document.createElement('li');
+    item.textContent = text;
+    list.append(item);
+  });
+  chapterText.append(list);
+  chapterCallout.textContent = chapter.callout;
+  reflectionPrompt.textContent = chapter.prompt;
+  reflectionFeedback.textContent = '';
+  reflectionOptions.replaceChildren();
+  chapter.options.forEach((option, index) => {
+    const button = document.createElement('button');
+    button.className = 'reflection-option';
+    button.textContent = option;
+    button.addEventListener('click', () => {
+      if (reflectionOptions.dataset.answered === 'true') return;
+      reflectionOptions.dataset.answered = 'true';
+      [...reflectionOptions.children].forEach((choice, choiceIndex) => {
+        choice.disabled = true;
+        if (choiceIndex === chapter.correct) choice.classList.add('correct');
+      });
+      if (index !== chapter.correct) button.classList.add('wrong');
+      reflectionFeedback.textContent = chapter.reflection;
+    });
+    reflectionOptions.append(button);
+  });
+  reflectionOptions.dataset.answered = 'false';
+  chapterNav.replaceChildren();
+  chapters.forEach((item, index) => {
+    const button = document.createElement('button');
+    button.className = `chapter-tab${index === chapterIndex ? ' active' : ''}`;
+    button.textContent = `${['١','٢','٣','٤','٥','٦','٧','٨'][index]} · ${item.title}`;
+    button.setAttribute('aria-current', index === chapterIndex ? 'step' : 'false');
+    button.addEventListener('click', () => { chapterIndex = index; renderChapter(); });
+    chapterNav.append(button);
+  });
+  document.getElementById('chapterProgress').style.width = `${((chapterIndex + 1) / chapters.length) * 100}%`;
+  document.getElementById('chapterProgressText').textContent = `${['١','٢','٣','٤','٥','٦','٧','٨'][chapterIndex]} / ٨`;
+  document.getElementById('previousChapter').disabled = chapterIndex === 0;
+  const next = document.getElementById('nextChapter');
+  next.textContent = chapterIndex === chapters.length - 1 ? 'ارجع لأول محور ↻' : 'المحور التالي ←';
+}
+
+document.getElementById('previousChapter').addEventListener('click', () => {
+  if (chapterIndex > 0) { chapterIndex--; renderChapter(); }
 });
+document.getElementById('nextChapter').addEventListener('click', () => {
+  chapterIndex = chapterIndex === chapters.length - 1 ? 0 : chapterIndex + 1;
+  renderChapter();
+});
+renderChapter();
 
 const questions = [
-  { text: 'إيه أكتر حاجة بتساعدنا نفهم حدث تاريخي؟', answers: ['حفظ السنة بس', 'معرفة الأسباب والنتائج', 'تجاهل المكان'], correct: 1 },
-  { text: 'ليه بنرتب الأحداث على خط زمني؟', answers: ['عشان نعرف تسلسلها', 'عشان نغيّر ترتيبها', 'عشان نحفظ أسماء بس'], correct: 0 },
-  { text: 'إيه اللي ممكن يساعدنا نعرف عن الماضي؟', answers: ['مصدر تاريخي أو أثر', 'التخمين فقط', 'عنوان الدرس فقط'], correct: 0 }
+  { topic: 'مفهوم الدولة', text: 'أي وصف يعبّر عن مفهوم الدولة الحديث؟', answers: ['وحدة سياسية لها شعب وحيز جغرافي وسلطة تمارس السيادة', 'مجموعة موارد طبيعية بلا سكان', 'مدينة لها حكومة محلية فقط'], correct: 0, explain: 'الدولة وحدة سياسية منظمة تضم شعبًا وحيزًا جغرافيًا وسلطة تمارس السيادة.' },
+  { topic: 'أركان الدولة', text: 'ما المجموعة التي تضم أركان الدولة الأربعة؟', answers: ['الشعب والحيز الجغرافي والسلطة والسيادة', 'النيل والجيش والزراعة والتجارة', 'اللغة والدين والتاريخ والمناخ'], correct: 0, explain: 'الأركان الأربعة هي الشعب والحيز الجغرافي والسلطة والسيادة.' },
+  { topic: 'الشعب', text: 'لماذا يُعد الشعب ركنًا أساسيًا للدولة؟', answers: ['لأنه مصدر السلطات وشريك في بناء الدولة', 'لأنه يرسم الحدود السياسية وحده', 'لأنه يسن جميع الأحكام القضائية'], correct: 0, explain: 'الشعب مصدر السلطات، ومشاركته السياسية والاقتصادية والاجتماعية تسهم في البناء والتنمية.' },
+  { topic: 'دور الشعب', text: 'أي مثال يوضح مشاركة الشعب السياسية؟', answers: ['اختيار ممثليه ومتابعة أداء الحكومة عبرهم', 'تنظيم المجال الجوي', 'إصدار المحاكم للأحكام'], correct: 0, explain: 'اختيار الممثلين ومتابعة أداء الحكومة من صور المشاركة السياسية.' },
+  { topic: 'دور الشعب', text: 'ماذا أظهرت مشاركة فئات المجتمع في ثورة ١٩١٩؟', answers: ['دور الشعب في مقاومة الاحتلال وتعزيز الوعي الوطني', 'دور الحدود البحرية في تنظيم الري', 'اختصاص السلطة القضائية'], correct: 0, explain: 'ثورة ١٩١٩ جسدت دور الشعب في مقاومة الاحتلال البريطاني وتعزيز وحدة المصريين والوعي الوطني.' },
+  { topic: 'الحيز الجغرافي', text: 'مما يتكون الحيز الجغرافي للدولة؟', answers: ['اليابس والمياه الإقليمية والمجال الجوي', 'اليابس فقط', 'السكان والمؤسسات فقط'], correct: 0, explain: 'يشمل الحيز الجغرافي اليابس والمياه الإقليمية والمجال الجوي الذي يعلوهما.' },
+  { topic: 'المياه الإقليمية', text: 'إلى أي مسافة تمتد المياه الإقليمية غالبًا من خط الأساس الساحلي وفق الدرس؟', answers: ['١٢ ميلًا بحريًا', '٢٢ ميلًا بحريًا', '٢٥ ميلًا بحريًا'], correct: 0, explain: 'يذكر الدرس أن المياه الإقليمية تمتد غالبًا لمسافة ١٢ ميلًا بحريًا من خط الأساس للساحل.' },
+  { topic: 'المجال الجوي', text: 'طائرة تدخل المجال الجوي المصري. ما الذي يحق للدولة فعله؟', answers: ['تنظيم دخولها واشتراط التصريح', 'لا يحق لها التدخل في المجال الجوي', 'تترك القرار للسلطة القضائية وحدها'], correct: 0, explain: 'المجال الجوي جزء من الحيز الجغرافي الذي تمارس الدولة سيادتها عليه، لذلك تنظّم الدخول إليه.' },
+  { topic: 'السلطات', text: 'أي مؤسسة تمثل السلطة التشريعية في الدرس؟', answers: ['مجلس النواب', 'الحكومة', 'المحاكم'], correct: 0, explain: 'مجلس النواب يمارس الاختصاص التشريعي، ويقر الخطة والموازنة ويراقب أعمال السلطة التنفيذية.' },
+  { topic: 'السلطات', text: 'إدارة شؤون الدولة وتنفيذ القوانين من اختصاص السلطة...', answers: ['التنفيذية', 'القضائية', 'التشريعية'], correct: 0, explain: 'السلطة التنفيذية، بما فيها الحكومة، تدير شؤون الدولة وتنفذ القوانين.' },
+  { topic: 'السلطات', text: 'الفصل في القضايا وإصدار الأحكام وفق القانون من اختصاص السلطة...', answers: ['القضائية', 'التشريعية', 'التنفيذية'], correct: 0, explain: 'السلطة القضائية تفصل في القضايا المختلفة وتصدر الأحكام وفقًا للقانون.' },
+  { topic: 'أهمية السلطة', text: 'أي مما يأتي من أهمية وجود السلطة؟', answers: ['الحفاظ على النظام والقانون وحماية حقوق المواطنين', 'إلغاء القوانين', 'منع الدولة من ممارسة سيادتها'], correct: 0, explain: 'وجود السلطة يساعد على النظام والقانون والاستقرار وحماية حقوق المواطنين وتمكين الدولة من ممارسة سيادتها.' },
+  { topic: 'السيادة الداخلية', text: 'أي موقف يعبّر عن السيادة الداخلية؟', answers: ['سن القوانين وحفظ الأمن داخل الدولة', 'إبرام معاهدة مع دولة أخرى', 'تمثيل الدولة في منظمة دولية'], correct: 0, explain: 'السيادة الداخلية تشمل سن القوانين وحفظ الأمن وإدارة شؤون المواطنين داخل الدولة.' },
+  { topic: 'السيادة الخارجية', text: 'إبرام معاهدة وإقامة علاقات دبلوماسية مثال على...', answers: ['السيادة الخارجية', 'السيادة الداخلية', 'الحيز الجغرافي'], correct: 0, explain: 'السيادة الخارجية تشمل استقلال الدولة في علاقاتها الدولية وإبرام المعاهدات وحماية مصالحها.' },
+  { topic: 'الموقع الجغرافي', text: 'كيف دعم موقع مصر قيام الدولة عبر التاريخ؟', answers: ['جعلها مركزًا للتواصل الحضاري والتبادل التجاري', 'عزلها عن قارات العالم القديم', 'منع الزراعة والاستقرار'], correct: 0, explain: 'موقع مصر عند ملتقى أفريقيا وآسيا وأوروبا جعلها مركزًا للتواصل والتبادل بين الشعوب.' },
+  { topic: 'الحدود الطبيعية', text: 'ما الدور الذي أدته الحدود الطبيعية لمصر؟', answers: ['ساعدت على حماية قلب الدولة، الوادي والدلتا', 'ألغت أهمية السلطة', 'منعت التواصل التجاري تمامًا'], correct: 0, explain: 'ساعدت الحدود الطبيعية على حماية قلب الدولة، وخاصة الوادي والدلتا، من الأخطار الخارجية.' },
+  { topic: 'نهر النيل', text: 'لماذا احتاجت الزراعة حول النيل إلى سلطة مركزية؟', answers: ['لتنظيم الري وتوزيع المياه وبناء السدود وحل النزاعات', 'لأن الزراعة لا تحتاج إلى تنظيم', 'لمنع العمل الجماعي'], correct: 0, explain: 'الري وتوزيع المياه والعمل الجماعي وحل النزاعات بين الأقاليم احتاجت إلى تنظيم مركزي.' },
+  { topic: 'الموارد الطبيعية', text: 'أي مجموعة تضم موارد طبيعية دعمت الاقتصاد المصري؟', answers: ['الأراضي الخصبة والمعادن وأحجار البناء', 'الانتخابات والمعاهدات', 'المحاكم والقوانين'], correct: 0, explain: 'الأراضي الخصبة والمعادن وأحجار البناء دعمت الزراعة والصناعة والتجارة والعمران.' },
+  { topic: 'المقومات البشرية', text: 'ما الحدث الذي ارتبط بظهور حكومة مركزية قوية في مصر؟', answers: ['توحيد القطرين على يد الملك مينا (نعرمر)', 'رسم الحدود الغربية عام ١٩٢٥', 'إبرام معاهدة دولية حديثة'], correct: 0, explain: 'يربط الدرس قيام حكومة مركزية قوية بتوحيد القطرين على يد الملك مينا (نعرمر).' },
+  { topic: 'الهوية والاستمرار', text: 'أي عبارة تشرح دور اللغة والتراث في استمرار الدولة؟', answers: ['يساعدان على حفظ الهوية والوحدة الوطنية عبر الأجيال', 'يحلّان محل الحيز الجغرافي', 'يلغيان الحاجة إلى المؤسسات'], correct: 0, explain: 'حفظ اللغة والتراث والتجانس الثقافي يدعم الهوية الوطنية ووحدة المجتمع واستقرار الدولة.' }
 ];
+
 let questionIndex = 0;
-let answered = false;\nlet finished = false;
+let answered = false;
+let score = 0;
+const quizCounter = document.getElementById('quizCounter');
 const questionText = document.getElementById('questionText');
+const questionTopic = document.getElementById('questionTopic');
 const answerGrid = document.getElementById('answerGrid');
-const feedback = document.getElementById('quizFeedback');
-const counter = document.getElementById('quizCounter');
-const nextButton = document.getElementById('nextQuestion');
+const quizFeedback = document.getElementById('quizFeedback');
+const nextQuestion = document.getElementById('nextQuestion');
 
 function renderQuestion() {
   const question = questions[questionIndex];
-  answered = false;\n  finished = false;
+  answered = false;
+  quizCounter.textContent = `سؤال ${questionIndex + 1} من ${questions.length}`;
+  questionTopic.textContent = question.topic;
   questionText.textContent = question.text;
-  counter.textContent = `سؤال ${['١','٢','٣'][questionIndex]} من ٣`;
-  feedback.textContent = '';
-  nextButton.hidden = true;
+  quizFeedback.textContent = '';
+  nextQuestion.hidden = true;
   answerGrid.replaceChildren();
   question.answers.forEach((answer, index) => {
     const button = document.createElement('button');
     button.className = 'answer';
     button.textContent = answer;
-    button.addEventListener('click', () => selectAnswer(button, index));
+    button.addEventListener('click', () => chooseAnswer(button, index));
     answerGrid.append(button);
   });
+  document.getElementById('scoreLabel').textContent = `النتيجة: ${score}`;
+  const progress = Math.round((questionIndex / questions.length) * 100);
+  document.getElementById('quizProgressBar').style.width = `${progress}%`;
+  document.getElementById('quizProgressLabel').textContent = `${progress}٪`;
 }
 
-function selectAnswer(button, selected) {
+function chooseAnswer(button, selectedIndex) {
   if (answered) return;
   answered = true;
-  const correctIndex = questions[questionIndex].correct;
-  [...answerGrid.children].forEach((answer, index) => {
-    answer.disabled = true;
-    if (index === correctIndex) answer.classList.add('correct');
+  const question = questions[questionIndex];
+  [...answerGrid.children].forEach((option, index) => {
+    option.disabled = true;
+    if (index === question.correct) option.classList.add('correct');
   });
-  if (selected === correctIndex) {
-    feedback.textContent = 'إجابة صحيحة! فهم الأحداث أهم من حفظها بس.';
+  if (selectedIndex === question.correct) {
+    score++;
+    quizFeedback.textContent = `إجابة صحيحة. ${question.explain}`;
   } else {
     button.classList.add('wrong');
-    feedback.textContent = 'قريب! الإجابة المظللة هي الأنسب. جرّب السؤال اللي بعده.';
+    quizFeedback.textContent = `الإجابة الصحيحة اتحددت. ${question.explain}`;
   }
-  nextButton.hidden = false;
+  document.getElementById('scoreLabel').textContent = `النتيجة: ${score}`;
+  nextQuestion.textContent = questionIndex === questions.length - 1 ? 'اعرض نتيجتي' : 'السؤال التالي ←';
+  nextQuestion.hidden = false;
 }
 
-nextButton.addEventListener('click', () => {
-  if (finished) { questionIndex = 0; nextButton.textContent = 'السؤال التالي ←'; renderQuestion(); return; }\n  if (questionIndex < questions.length - 1) {
+nextQuestion.addEventListener('click', () => {
+  if (!answered) return;
+  if (questionIndex < questions.length - 1) {
     questionIndex++;
     renderQuestion();
-  } else {
-    questionIndex = 0;
-    nextButton.textContent = 'إعادة المراجعة ↻';
-    feedback.textContent = 'خلصت المراجعة! أحسنت، جاهز لدرس جديد.';
-    nextButton.hidden = false;
-    nextButton.onclick = () => { nextButton.textContent = 'السؤال التالي ←'; nextButton.onclick = null; renderQuestion(); };
+    return;
   }
+  document.getElementById('quizCard').hidden = true;
+  document.getElementById('quizResult').hidden = false;
+  quizCounter.textContent = 'اكتملت الأسئلة';
+  document.getElementById('quizProgressBar').style.width = '100%';
+  document.getElementById('quizProgressLabel').textContent = '١٠٠٪';
+  document.getElementById('resultTitle').textContent = `${score} من ${questions.length}`;
+  const message = score >= 16 ? 'ممتاز! واضح إنك رابط بين أركان الدولة ومقومات استمرارها.' : score >= 10 ? 'شغل كويس. ارجع للمحاور اللي محتاجة مراجعة وجرب تاني.' : 'راجع الشرح على مهل، وبعدها أعد الأسئلة. كل محاولة هتثبت المعلومة.';
+  document.getElementById('resultMessage').textContent = message;
+});
+
+document.getElementById('restartQuiz').addEventListener('click', () => {
+  score = 0;
+  questionIndex = 0;
+  document.getElementById('quizCard').hidden = false;
+  document.getElementById('quizResult').hidden = true;
+  nextQuestion.textContent = 'السؤال التالي ←';
+  renderQuestion();
 });
 renderQuestion();
